@@ -25,32 +25,9 @@ public class BooksInventoryRestController {
 	@Qualifier(value = "inventoryService")
 	private IInventoryService iInventoryService;
 
-	static public String naming = "mohit"; // the value will be null
-
-	private int num; // the value will be 0
-
 	@GetMapping("/booksInventory")
 	public Map<Long, Integer> getInventoryData() {
-
-		String name = "mohit";
-		System.out.println(name);
 		return iInventoryService.getInventoryData();
-	}
-
-	@GetMapping("/startMonitoring")
-	public String startMonitoring() {
-		ExecutorService ex = Executors.newFixedThreadPool(2);
-		ex.execute(() -> {
-			while (true) {
-				try {
-					Thread.sleep(1000l);
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
-				System.out.println(getInventoryData());
-			}
-		} );
-		return "Monitoring has been started";
 	}
 
 	@PutMapping("/updateBookInventory")
