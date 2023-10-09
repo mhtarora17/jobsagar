@@ -1,11 +1,10 @@
-package com.spring.assignment.service;
+package com.job.sagar.service;
 
 import java.util.List;
 
+import com.job.sagar.dto.BookDataObject;
+import com.job.sagar.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
-
-import com.spring.assignment.dto.BookDataObject;
-import com.spring.assignment.exception.ResourceNotFoundException;
 
 @Component("bookService")
 public interface IBookService {

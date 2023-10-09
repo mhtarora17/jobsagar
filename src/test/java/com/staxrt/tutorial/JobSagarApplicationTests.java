@@ -1,7 +1,7 @@
 package com.staxrt.tutorial;
 
-import com.spring.assignment.Application;
-import com.spring.assignment.model.Book;
+import com.job.sagar.JobSagarApplication;
+import com.job.sagar.model.Book;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApplicationTests {
+@SpringBootTest(classes = JobSagarApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class JobSagarApplicationTests {
 
 	@Autowired
 	private TestRestTemplate restTemplate;

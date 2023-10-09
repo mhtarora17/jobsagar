@@ -1,4 +1,4 @@
-package com.spring.assignment.dto;
+package com.job.sagar.dto;
 
 import java.util.Date;
 

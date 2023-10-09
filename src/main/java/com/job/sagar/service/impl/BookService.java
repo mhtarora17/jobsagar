@@ -1,20 +1,20 @@
-package com.spring.assignment.service.impl;
+package com.job.sagar.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.spring.assignment.model.BooksInventory;
-import com.spring.assignment.repository.BooksInventoryRepository;
+import com.job.sagar.dto.BookDataObject;
+import com.job.sagar.exception.ResourceNotFoundException;
+import com.job.sagar.repository.BooksRepository;
+import com.job.sagar.model.BooksInventory;
+import com.job.sagar.repository.BooksInventoryRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.spring.assignment.dto.BookDataObject;
-import com.spring.assignment.exception.ResourceNotFoundException;
-import com.spring.assignment.model.Book;
-import com.spring.assignment.repository.BooksRepository;
-import com.spring.assignment.service.IBookService;
+import com.job.sagar.model.Book;
+import com.job.sagar.service.IBookService;
 
 @Service(value = "bookService")
 public class BookService implements IBookService {

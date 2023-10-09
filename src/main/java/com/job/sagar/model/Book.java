@@ -1,4 +1,4 @@
-package com.spring.assignment.model;
+package com.job.sagar.model;
 
 import java.util.Date;
 

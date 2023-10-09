@@ -1,8 +1,8 @@
-package com.spring.assignment.controller;
+package com.job.sagar.controller;
 
-import com.spring.assignment.dto.BookInventoryDataObject;
-import com.spring.assignment.exception.ResourceNotFoundException;
-import com.spring.assignment.service.IInventoryService;
+import com.job.sagar.service.IInventoryService;
+import com.job.sagar.dto.BookInventoryDataObject;
+import com.job.sagar.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -4,13 +4,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.spring.assignment</groupId>
-	<artifactId>spring-boot-assignment-mohit</artifactId>
+	<groupId>com.job.sagar</groupId>
+	<artifactId>JobSagar</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>sspring-boot-assignment-mohit</name>
-	<description>Spring Boot Assignment</description>
+	<name>job-sagar</name>
+	<description>Job Sagar</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

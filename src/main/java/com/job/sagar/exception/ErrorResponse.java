@@ -1,4 +1,4 @@
-package com.spring.assignment.exception;
+package com.job.sagar.exception;
 
 import java.util.Date;
 

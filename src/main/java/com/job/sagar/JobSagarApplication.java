@@ -1,11 +1,8 @@
-package com.spring.assignment;
+package com.job.sagar;
 
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * The type Application.
@@ -13,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author Mohit Arora
  */
 @SpringBootApplication
-public class Application {
+public class JobSagarApplication {
 
   /**
    * The entry point of application.
@@ -21,6 +18,6 @@ public class Application {
    * @param args the input arguments
    */
   public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(JobSagarApplication.class, args);
 	}
 }

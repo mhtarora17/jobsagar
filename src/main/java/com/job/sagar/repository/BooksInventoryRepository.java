@@ -1,7 +1,6 @@
-package com.spring.assignment.repository;
+package com.job.sagar.repository;
 
-import com.spring.assignment.model.Book;
-import com.spring.assignment.model.BooksInventory;
+import com.job.sagar.model.BooksInventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

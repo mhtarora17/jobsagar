@@ -1,4 +1,4 @@
-package com.spring.assignment.model;
+package com.job.sagar.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
