@@ -5,8 +5,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "jobs")
 public class Jobs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
