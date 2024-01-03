@@ -46,6 +46,11 @@ public class Users {
     public Users() {
     }
 
+    public Users(Long id, String userName) {
+        this.id = id;
+        this.userName = userName;
+    }
+
     // Getters and Setters
 
     public Long getId() {

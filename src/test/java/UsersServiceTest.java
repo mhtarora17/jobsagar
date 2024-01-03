@@ -1,3 +1,4 @@
+import com.job.sagar.dto.UsersDataObject;
 import com.job.sagar.model.Users;
 import com.job.sagar.repository.UsersRepository;
 import com.job.sagar.service.impl.UsersService;
@@ -35,14 +36,13 @@ class UsersServiceTest {
         usersList.add(new Users(2L, "Jane"));
 
         when(usersRepository.findAll()).thenReturn(usersList);
-
         // Act
         List<UsersDataObject> result = usersService.getAllUsers();
 
         // Assert
         assertEquals(2, result.size());
-        assertEquals("John", result.get(0).getName());
-        assertEquals("Jane", result.get(1).getName());
+        assertEquals("John", result.get(0).getUserName());
+        assertEquals("Jane", result.get(1).getUserName());
     }
 
     @Test
@@ -59,14 +59,14 @@ class UsersServiceTest {
         // Assert
         assertTrue(result.isPresent());
         assertEquals(userId, result.get().getId());
-        assertEquals("John", result.get().getName());
+        assertEquals("John", result.get().getUserName());
     }
 
     @Test
     void testCreateUser() {
         // Arrange
         UsersDataObject userDataObject = new UsersDataObject();
-        userDataObject.setName("John");
+        userDataObject.setUserName("John");
 
         Users users = new Users();
         BeanUtils.copyProperties(userDataObject, users);
@@ -77,7 +77,7 @@ class UsersServiceTest {
         UsersDataObject result = usersService.createUser(userDataObject);
 
         // Assert
-        assertEquals("John", result.getName());
+        assertEquals("John", result.getUserName());
     }
 
     @Test
@@ -85,7 +85,7 @@ class UsersServiceTest {
         // Arrange
         Long userId = 1L;
         UsersDataObject userDataObject = new UsersDataObject();
-        userDataObject.setName("Jane");
+        userDataObject.setUserName("Jane");
 
         Users existingUser = new Users(userId, "John");
 
@@ -97,7 +97,7 @@ class UsersServiceTest {
 
         // Assert
         assertEquals(userId, result.getId());
-        assertEquals("Jane", result.getName());
+        assertEquals("Jane", result.getUserName());
     }
 
     @Test
