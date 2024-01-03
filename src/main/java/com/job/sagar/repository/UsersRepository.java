@@ -8,6 +8,6 @@ import com.job.sagar.model.Users;
 
 
 @Repository
-public interface UsersRepository extends JpaRepository<Users, Integer> {
+public interface UsersRepository extends JpaRepository<Users, Long> {
     // Add custom repository methods here if needed
 }
