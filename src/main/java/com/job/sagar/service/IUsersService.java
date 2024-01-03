@@ -5,17 +5,18 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
+import com.job.sagar.dto.UsersDataObject;
 import com.job.sagar.model.Users;
 
 @Component("usersService")
 public interface IUsersService {
-    Users createUser(Users user);
+    UsersDataObject createUser(UsersDataObject user);
     
-    Optional<Users> getUserById(int id);
+    Optional<Users> getUserById(Long id);
     
-    List<Users> getAllUsers();
+    List<UsersDataObject> getAllUsers();
     
-    Users updateUser(Integer id, Users user);
+    Users updateUser(Long id, UsersDataObject user);
     
-    void deleteUser(int id);
+    void deleteUser(Long id);
 }
