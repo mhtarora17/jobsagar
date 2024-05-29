@@ -1,8 +1,8 @@
 package com.job.sagar.commons;
 
 
-import com.commons.utility.CommonsUtility;
-import org.apache.Logging.log4j.LogManager;
+import com.job.Utils.CommonsUtility;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.retry.RetryCallback;
 import org.springframework.retry.RetryContext;

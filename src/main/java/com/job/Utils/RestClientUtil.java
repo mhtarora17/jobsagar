@@ -1,7 +1,5 @@
 package com.job.Utils;
 
-import com.commons.listener.RestRetryListener;
-import com.commons.utility.CommonsUtility;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import java.lang.reflect.Field;
 import java.net.ConnectException;
@@ -17,7 +15,9 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
-import javax.annotation. PostConstruct;
+import javax.annotation.PostConstruct;
+
+import com.job.sagar.commons.RestRetryListener;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HeaderElement;
 import org.apache.http.HeaderElementIterator;
@@ -29,7 +29,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn. PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeaderElementIterator;
 import org.apache.http.util.Args;
-import org.apache.Logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation. Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,7 +58,7 @@ ignoreResourceNotFound = true
 )
 public class RestClientUtil {
 
-private static final Logger Log = LogManager.getLogger(RestClientUtil.class);
+private static final Logger log = LogManager.getLogger(RestClientUtil.class);
 
 @Value("${connection.request.timeout:1000}")
 private Integer connectionRequestTimeout;
@@ -102,7 +102,7 @@ private void populatePublicServices() {
 }
 
 private Integer getConnectionTimeout(String serviceName) {
-    String value = this.httpclientProperties.getProperty(serviceName + ".connection.timeout");
+    String value = this.httpClientProperties.getProperty(serviceName + ".connection.timeout");
     if (StringUtils.isNotEmpty (value)) {
         try {
             return Integer.parseInt(value);
@@ -219,10 +219,8 @@ private ClientHttpRequestFactory createRequestFactory(String serviceName) {
         connectionManager.setValidateAfterInactivity (idleConnectionValidationTimeMs);
     }
     RequestConfig config = RequestConfig.custom().setConnectTimeout(this.getConnectionTimeout(serviceName)).setConnectionRequestTimeout(this.getConnectionRequestTimeout(serviceName)).setSocketTimeout(this.getReadTimeout(serviceName)).build();
-    HttpClientBuilder httpClientBuilder = HttpClientBuilder.create().setConnectionManager (connectionManager).setDefaultRequestConfig(config);
-    Stream var10000 = this.publicServices.stream();
-    Objects.requireNonNull(serviceName);
-    boolean isPublicService = var10000.anyMatch (serviceName::equalsIgnoreCase);
+    HttpClientBuilder httpClientBuilder = HttpClientBuilder.create().setConnectionManager(connectionManager).setDefaultRequestConfig(config);
+    boolean isPublicService = this.publicServices.stream().anyMatch(serviceName::equalsIgnoreCase);
     if (isPublicService) {  
         String proxyIpAddress = this.getProxyIpAddress();
         Integer proxyPortNumber = this.getProxyPortNumber();
@@ -232,30 +230,30 @@ private ClientHttpRequestFactory createRequestFactory(String serviceName) {
     }
     int connectionIdleTimeMs = this.getConnectionIdleTime (serviceName);
     if (connectionIdleTimeMs > 0) {
-        httpClientBuilder.setConnectionTimeToLive((long)connectionIdleTimeMs, TimeUnit.MILLISECONDS);
+        httpClientBuilder.setConnectionTimeToLive(connectionIdleTimeMs, TimeUnit.MILLISECONDS);
     }
     int defaultConnectionKeepAliveTime = this.getDefaultConnectionKeepAliveTime (serviceName);
     if (defaultConnectionKeepAliveTime > 0) {
-        httpClientBuilder.setKeepAliveStrategy (this.getCustomKeepAliveStrategy(defaultConnectionKeepAliveTime));
+        httpClientBuilder.setKeepAliveStrategy (this.getCustomkeepAliveStrategy(defaultConnectionKeepAliveTime));
     }
     CloseableHttpClient httpClient = httpClientBuilder.build();
-    return new HttpComponentsClientHttpRequestFactory (httpClient);
+    return new HttpComponentsClientHttpRequestFactory(httpClient);
 }
 
-private ConnectionKeepAliveStrategy getCustomkeepAliveStrategy (int defaultConnectionKeepAliveTime) {
+private ConnectionKeepAliveStrategy getCustomkeepAliveStrategy(int defaultConnectionKeepAliveTime) {
     return (response, context) -> {
         Args.notNull(response, "HTTP response");
         HeaderElementIterator it = new BasicHeaderElementIterator (response.headerIterator("Keep-Alive"));
         String param;
         String value;
         do {
-            if (lit.hasNext()) {
-                return (Long) defaultConnectionKeepAliveTime;
+            if (it.hasNext()) {
+                return (long)defaultConnectionKeepAliveTime;
             }
         HeaderElement he = it.nextElement();
         param = he.getName();
         value = he.getValue();
-    } while(value == null || !param.equalsIgnoreCase( anotherString: "timeout"));
+    } while(value == null || !param.equalsIgnoreCase( "timeout"));
         return Long.parseLong (value) * 1000L;
     };
 }
@@ -276,9 +274,9 @@ private RestTemplate createRestTemplate(ClientHttpRequestFactory factory) {
 public RetryTemplate restRetryTemplate(int maxAttempt, long retryIntervalMs, double multiplier) {
     RetryTemplate retryTemplate = new RetryTemplate();
     ExponentialBackOffPolicy backoffPolicy = new ExponentialBackOffPolicy();
-    backOffPolicy.setInitialInterval (retryIntervalMs);
-    backOffPolicy.setMultiplier (multiplier);
-    retryTemplate.setBackOffPolicy (backOffPolicy);
+    backoffPolicy.setInitialInterval(retryIntervalMs);
+    backoffPolicy.setMultiplier(multiplier);
+    retryTemplate.setBackOffPolicy (backoffPolicy);
     SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy(maxAttempt, RETRY_EXCEPTIONS, true, false);
     retryTemplate.setRetryPolicy (retryPolicy);
     retryTemplate.registerListener(new RestRetryListener());
@@ -294,11 +292,11 @@ public RestTemplate getRestTemplate(String serviceName) {
     return (RestTemplate) cache.get(serviceName);
 }
 
-public <T> ResponseEntity<T> customExchange (RestTemplate restTemplate, RetryTemplate retryTemplate, String url, HttpMethod method, HttpEntity<?> requestEntity, Class<T> responseType, Object... uriVariable) throws RestClientException {
+public <T> ResponseEntity<T> customExchange (RestTemplate restTemplate, RetryTemplate retryTemplate, String url, HttpMethod method, HttpEntity<?> requestEntity, Class<T> responseType, Object... uriVariables) throws RestClientException {
 
     try {
     return (ResponseEntity)retryTemplate.execute((arg) -> {
-        return restTemplate, exchange (url, method, requestEntity, responseType, uniVariables);
+        return restTemplate.exchange(url, method, requestEntity, responseType, uriVariables);
     });
     } catch (RestClientException var9) {
         log.error("Exception occurred in rest exchange {}", CommonsUtility.exceptionFormatter(var9));
@@ -337,7 +335,7 @@ private void invalidateCache (String cacheName) {
 }
 
 static {
-    RETRY_EXCEPTIONS, put (UnknownHostException.class, true);
+    RETRY_EXCEPTIONS.put(UnknownHostException.class, true);
 }   
 
 }
