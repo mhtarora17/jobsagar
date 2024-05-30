@@ -2,13 +2,9 @@ package com.job.Utils;
 
 import com.commons.utility.CommonsUtility;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.job.sagar.exception.BaseException;
+import com.job.sagar.exception.MicroServiceUnavailableException;
 import com.paytm.bank.datadog.MetricsAgent;
-import com.paytm.bank.exception.BaseException;
-import com.paytm.bank.exception. ExceptionEnum;
-import com.paytm.bank.exception. InvestmentServiceApiExceptionEnum;
-import com.paytm.bank.exception.MicroServiceUnavailableException;
-import com.paytm.bank.exception. OauthApiExceptionEnum;
-import com.paytm.bank.exception.WalletApiExceptionEnum;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -26,6 +22,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import static com.job.sagar.constant.Constants.*;
+import static com.job.sagar.constant.ErrorCodesConstant.*;
 
 @Component
 public class RestMethod {
@@ -75,7 +74,7 @@ public class RestMethod {
         } catch (HttpStatusCodeException e) {
             logger.error("Http Status Code error while calling external service. {}, Response Body: {}."
                     , CommonUtils.exceptionFormotter(e), e.getResponseBodyAsString());
-            throw new BaseException (FAILED, INVALID_ACCOUNT_NUMBER, errorReason);
+            throw new BaseException (FAILED, INTERNAL_SERVER_ERROR_CODE, INTERNAL_SERVER_ERROR);
         }
         catch (ResourceAccessException e) {
             logger.error("Micro Service unavailable error while calling external service. {}",
