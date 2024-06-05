@@ -18,7 +18,8 @@ public class ErrorCodesConstant {
     public static final int NO_ERROR_CODE_FOUND_IN_DB = 1053;
     public static final int TOKEN_GENERATION_EXCEPTION = 1135;
     public static final int DATE_PARSE_ERROR = 1081;
+    public static final int DATABASE_SERVICE_UNAVAILABLE = 8026;
 
-
+    public static final int DB_SERVICE_UNAVAILABLE_MESSAGE = 8004;
 
 }

@@ -1,58 +1,29 @@
-package com.job.Utils;
+package com.job.sagar.Utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTCreator.Builder;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.commons.dto.request.maquette.Transaction.TransactionType;
-import com.commons.dto.response.AccountBalances;
-import com.commons.dto.response.BaseResponse;
-import com.commons.dto.response.CustomResponse;
-import com.commons.dto.response.CustomResponse.Status;
-import com.commons.dto.response.SsfbFailureResponse;
-import com.commons.utility.CommonsUtility;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type. TypeReference;
-        import com.fasterxml.jackson.databind. DeserializationFeature;
-        import com.fasterxml.jackson.databind.JsonNode;
-        import com.fasterxml.jackson.databind.ObjectMapper;
-        import com.google.common.hash.Hashing;
-        import com.google.gson.Gson;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.hash.Hashing;
+import com.google.gson.Gson;
 import com.job.sagar.constant.Constants;
 import com.job.sagar.exception.BaseException;
+import com.job.sagar.exception.ServiceErrorFactory;
 import com.opencsv.CSVWriter;
-        import com.opencsv.bean.StatefulBeanToCsv;
-        import com.opencsv.bean.StatefulBeanToCsvBuilder;
-        import com.opencsv.exceptions.CsvDataTypeMismatchException;
-        import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-        import com.paytm.bank.constant.Constants;
-        import com.paytm.bank.constant.ErrorCodesConstant;
-        import com.paytm.bank.enums.Client;
-        import com.paytm.bank.enums.HRAdmin;
-        import com.paytm.bank.enums.OriginalTxnReportCodeEnum;
-        import com.paytm.bank.enums.TransferModeEnum;
-        import com.paytm.bank.exception.BaseException;
-        import com.paytm.bank.extBank. CustomMappingStrategy;
-        import com.paytm.bank.initializer.serviceerror.ServiceErrorFactory;
-        import com.paytm.bank.model.transaction.db.CbsTransactionData;
-import com.paytm.bank.model.transaction.db.FisTransactionData;
-import com.paytm.bank.model.transaction.db.NodalData;
-import com.paytm.bank.model.transaction.db.fundtransfer. FundTransferData;
-import com.paytm.bank.model.transaction.db.fundtransfer.GratificationFundTransferData;
-import com.paytm.bank.nodel.transaction.db.neft.GenericFundTransferData;
-import com.paytm.bank.objects.request.CheckLimitRequest;
-import com.paytm.bank.objects.request.FundTransferRequest;
-import com.paytm.bank.objects.request. InitRequest;
-import com.paytm.bank.service.Service;
-import com.paytm.bank.service.neft.FundMovementServiceFactory;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import lombok.NonNull;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.ThreadContext;
 import org.hibernate.PessimisticLockException;
 import org.hibernate.QueryTimeoutException;
 import org.hibernate.exception.JDBCConnectionException;
@@ -60,10 +31,10 @@ import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.orm.jpa.JpaSystemException;
-import org.springframework.transaction. CannotCreateTransactionException;
-import org.springframework.transaction. TransactionSystemException;
+import org.springframework.transaction.CannotCreateTransactionException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.client.ResourceAccessException;
-import javax.validation.constraints.NotNull;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -71,8 +42,7 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.net. InetAddress;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -83,65 +53,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.job.sagar.constant.Constants.AUTHORIZATION;
-import static com.job.sagar.constant.Constants.FAILED;
-import static com.job.sagar.constant.Constants.JWT_TOKEN_GENERATION_EXCEPTION_MESSAGE;
-import static com.job.sagar.constant.Constants.UTILS_INSTANTIATION;
+import static com.job.sagar.constant.Constants.*;
+import static com.job.sagar.constant.ErrorCodesConstant.INTERNAL_SERVER_ERROR;
 import static com.job.sagar.constant.ErrorCodesConstant.*;
-import static com.paytm.bank.constant.Constants.AUTHORIZATION;
-import static com.paytm.bank.constant.Constants.BATCHOPS_SECRET_KEY;
-import static com.paytm.bank.constant.Constants.CASA_FLAG;
-import static com.paytm.bank.constant.Constants.CBS_PROCESSED_DATE;
-import static com.paytm.bank.constant.Constants.CNBS_SECRET_KEY;
-import static com.paytm.bank.constant.Constants.FAILED;
-import static com.paytm.bank.constant.Constants.FIS;
-import static com.paytm.bank.constant.Constants.IMPS_TRANSACTION_TYPE;
-import static com.paytm.bank.constant.Constants.IS_CUSTOM_PMT_ADD;
-import static com.paytm.bank.constant.Constants. IVR_SECRET_KEY;
-import static com.paytm.bank.constant.Constants.JWTTOKEN;
-        import static com.paytm.bank.constant.Constants. JWT_TOKEN_GENERATION_EXCEPTION_MESSAGE;
-        import static com.paytm.bank.constant.Constants.OAUTH;
-        import static com.paytm.bank.constant.Constants. ONBOARD_DATE;
-        import static com.paytm.bank.constant.Constants.PRODUCT_SECRET_KEY;
-        import static com.paytm.bank.constant.Constants.REQUESTTOKEN;
-        import static com.paytm.bank.constant.Constants.RRN;
-        import static com.paytm.bank.constant.Constants.SI_SECRET_KEY;
-        import static com.paytm.bank.constant.Constants.SUBSCRIPTION_FROM_DATE;
-        import static com.paytm.bank.constant.Constants.SUBSCRIPTION_TO_DATE;
-        import static com.paytm.bank.constant.Constants. TRANSACTION_POSTING_TIMESTAMP;
-        import static com.paytm.bank.constant.Constants. TRANSACTION_TYPE;
-        import static com.paytm.bank.constant.Constants. TRANSFER_MODE;
-        import static com.paytm.bank.constant.Constants. TRANSFER_MODE_NEFT;
-        import static com.paytm.bank.constant.Constants. TRANSFER_MODE_RTGS;
-        import static com.paytm.bank.constant.Constants.TSERVICE;
-        import static com.paytm.bank.constant.Constants.TYPE_STS; I
-        import static com.paytm.bank.constant.Constants.USERTOKEN;
-        import static com.paytm.bank.constant.Constants.UTILS_INSTANTIATION;
-        import static com.paytm.bank.constant.Constants.UTR;
-        import static com.paytm.bank.constant. Constants.VALIDATION_TOKEN;
-        import static com.paytm.bank.constant.ErrorCodesConstant.DATABASE_SERVICE_UNAVAILABLE;
-        import static com.paytm.bank.constant.ErrorCodesConstant.DATE_PARSE_ERROR;
-        import static com.paytm.bank.constant.ErrorCodesConstant.INTERNAL_SERVER_ERROR;
 import static java.util.Calendar.*;
 
 public class CommonUtils {
@@ -293,7 +212,7 @@ public class CommonUtils {
         try {
             return number.substring(0, 2) + "XX" + number.substring(number.length() - 4);
         } catch (Exception e) {
-            Logger.info("Exception occurred while masking account number: (), Exeption: ()", number,
+            logger.info("Exception occurred while masking account number: {}, Exeption: {}", number,
                     CommonUtils.exceptionFormatter(e));
             return null;
         }
@@ -425,7 +344,7 @@ public class CommonUtils {
             throws BaseException {
         try {
             BaseException exception = ServiceErrorFactory.getException(serviceName, errorCode).orElse(ServiceErrorFactory
-                    .getException(TSERVICE, String.valueOf(NO_ERROR_CODE_FOUND_IN_DB)).get());
+                    .getException("jobSagar", String.valueOf(NO_ERROR_CODE_FOUND_IN_DB)).get());
             logger.error("Exception occurred in {} client. {}", serviceName, exception.toString());
             return exception;
         } catch (BaseException e) {
@@ -633,7 +552,7 @@ public class CommonUtils {
         logger.debug("Starting csv creation for filePath {}", filePath);
         try {
             new File(filePath).getParentFile().mkdirs();
-            CustomMappingStrategy<T> mappingStrategy = new CustonMappingStrategy<>();
+            CustomMappingStrategy<T> mappingStrategy = new CustomMappingStrategy<>();
             mappingStrategy.setType(clazz);
             Writer writer = new FileWriter(filePath, false);
             StatefulBeanToCsv<T> statefulBeanToCsv = new StatefulBeanToCsvBuilder<T>(writer).
@@ -729,6 +648,104 @@ public class CommonUtils {
             }
         }
         return properties;
+    }
+
+    public static boolean validateLagTime (long time, long lagInSecond) {
+        return Instant.now().isAfter(Instant.ofEpochMilli(time).plusSeconds(lagInSecond));
+    }
+
+    public static void checkIfDBFailureAndThrowException (Exception ex) {
+        try {
+            logger.info("Going to check if DB exception for Exception: {}", ex.getMessage());
+            if (ex instanceof DataAccessResourceFailureException
+                    || ex instanceof CannotCreateTransactionException
+                    || ex instanceof InvocationTargetException || ex instanceof PessimisticLockingFailureException || ex instanceof org.springframework.dao.QueryTimeoutException) {
+                if (ex.getCause() instanceof JDBCConnectionException || ex
+                        .getCause() instanceof TransactionSystemException || ex
+                        .getCause() instanceof JpaSystemException || ex
+                        .getCause() instanceof CannotAcquireLockException || ex
+                        .getCause() instanceof DataAccessResourceFailureException || ex
+                        .getCause() instanceof CannotCreateTransactionException || ex
+                        .getCause() instanceof QueryTimeoutException || ex
+                        .getCause() instanceof PessimisticLockingFailureException || ex instanceof IllegalArgumentException) {
+                    logger.error("Database Service is unavailable {}", CommonUtils.exceptionFormatter(ex));
+                    throw ServiceErrorFactory.getException("jobSagar", String.valueOf(DATABASE_SERVICE_UNAVAILABLE))
+                            .get();
+                } else {
+                    logger.error("Database Exception found {}", CommonUtils.exceptionFormatter(ex));
+                }
+            } else {
+                logger.info("DB Exception handling not applicable");
+            }
+        } finally {
+        }
+    }
+
+    public static boolean checkIfDBFailure (Exception ex) {
+        if (ex instanceof DataAccessResourceFailureException | ex instanceof CannotCreateTransactionException
+        || ex instanceof InvocationTargetException || ex instanceof PessimisticLockingFailureException || ex instanceof org.springframework.dao.QueryTimeoutException) {
+        if (ex.getCause() instanceof JDBCConnectionException || ex
+.getCause() instanceof TransactionSystemException || ex
+                .getCause() instanceof JpaSystemException || ex
+                .getCause() instanceof CannotAcquireLockException || ex
+                .getCause() instanceof DataAccessResourceFailureException || ex
+                .getCause() instanceof CannotCreateTransactionException || ex
+                .getCause() instanceof QueryTimeoutException || ex
+                .getCause() instanceof PessimisticLockingFailureException || ex instanceof IllegalArgumentException || ex.getCause() instanceof  PessimisticLockException) {
+        logger.error("Database Exception Occurred {}", CommonUtils.exceptionFormatter(ex));
+        return true;
+    } else {
+        return false;
+    }
+    } else {
+        return false;
+        }
+        }
+
+
+    public static LocalDate convertToLocalDateViaMilisecond (Date dateToConvert) {
+        return Instant.ofEpochMilli(dateToConvert.getTime())
+        .atZone (ZoneId.systemDefault())
+        .toLocalDate();
+        }
+
+    public static String getFormattedMonthYearDate (String input, String format) {
+        try {
+            Date date = convertStringToDate(input, format);
+            LocalDate localDate = convertToLocalDateViaMilisecond(date);
+            String month = localDate.getMonth().toString().substring(0, 3);
+            String year = String.valueOf(localDate.getYear());
+            return month + "-" + year;
+        } catch (Exception e) {
+            logger.info("Formatting exception: ", CommonUtils.exceptionFormatter(e));
+            throw e;
+        }
+    }
+    public static boolean checkIfValueMatchFromMap (Map<String, Object> map, String key, String value) {
+        if (null != map && map.containsKey(key) && map.get(key).equals(value)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public static String getValueFromProperties (Map<String, Object> properties, String key) {
+        return (properties.get(key) != null ? properties.get(key).toString() : null);
+    }
+    public static String getStringValue (Map<String, String> properties, String key) {
+        if (null != properties) {
+            return ((properties.get(key) != null) && (properties.get(key) != "null")? String.valueOf(properties.get(key)): null);
+        }
+        return null;
+    }
+
+    public static String getValueFromPropertiesV2 (Map<String, Object> properties, String key) {
+        if (null != properties) {
+            return (properties.get(key) != null ? properties.get(key).toString(): null);
+        }else{
+            return null;
+        }
     }
 
 }

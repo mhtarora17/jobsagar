@@ -1,13 +1,11 @@
-package com.job.Utils;
+package com.job.sagar.Utils;
 
-import com.commons.utility.CommonsUtility;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.job.sagar.datadog.MetricsAgent;
 import com.job.sagar.exception.BaseException;
 import com.job.sagar.exception.MicroServiceUnavailableException;
-import com.paytm.bank.datadog.MetricsAgent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,13 +15,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
-import java.io.IOException;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
 import static com.job.sagar.constant.Constants.*;
+import static com.job.sagar.constant.Constants.INTERNAL_SERVER_ERROR;
 import static com.job.sagar.constant.ErrorCodesConstant.*;
 
 @Component
@@ -54,7 +53,7 @@ public class RestMethod {
             if (ex.getCode() == INTEGRATION_SERVICE_UNAVAILABLE_ERROR_CODE && RETRY_ENABLED_SERVICES.contains(serviceName) && httpMethod.toString().equals(HttpMethod.GET.toString())) {
                 logger.debug("Retrying hitting url:{}.", url);
                 return getResponse(httpHeaders, responseClass, url, serviceName, httpMethod, requestObject);
-            } else if (ex.getCode() == INTEGRATION_SERVICE_UNAVAILABLE_ERROR_CODE && RETRY_ENABLED_SERVICES.contains(serviceName) && url.contains(PPBL_BENEFICIARY_VERIFICATION)) {
+            } else if (ex.getCode() == INTEGRATION_SERVICE_UNAVAILABLE_ERROR_CODE && RETRY_ENABLED_SERVICES.contains(serviceName)) {
                 logger.debug("Retrying hitting url:{},", url);
                 return getResponse(httpHeaders, responseClass, url, serviceName, httpMethod, requestObject);
             }
@@ -73,12 +72,12 @@ public class RestMethod {
             return responseEntity.getBody();
         } catch (HttpStatusCodeException e) {
             logger.error("Http Status Code error while calling external service. {}, Response Body: {}."
-                    , CommonUtils.exceptionFormotter(e), e.getResponseBodyAsString());
+                    , CommonUtils.exceptionFormatter(e), e.getResponseBodyAsString());
             throw new BaseException (FAILED, INTERNAL_SERVER_ERROR_CODE, INTERNAL_SERVER_ERROR);
         }
         catch (ResourceAccessException e) {
             logger.error("Micro Service unavailable error while calling external service. {}",
-                CommonUtils.exceptionFormotter(e));
+                CommonUtils.exceptionFormatter(e));
         pushUnavailableCodeToDatadog(serviceName);
         throw new MicroServiceUnavailableException(PENDING,
                     INTEGRATION_SERVICE_UNAVAILABLE_ERROR_CODE,

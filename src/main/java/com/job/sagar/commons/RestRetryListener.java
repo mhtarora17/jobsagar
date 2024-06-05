@@ -1,7 +1,7 @@
 package com.job.sagar.commons;
 
 
-import com.job.Utils.CommonsUtility;
+import com.job.sagar.Utils.CommonsUtility;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.retry.RetryCallback;

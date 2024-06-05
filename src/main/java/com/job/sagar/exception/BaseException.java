@@ -1,13 +1,13 @@
 package com.job.sagar.exception;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Arrays;
-import com.paytm.bank.utility.CommonUtils;
+import com.job.sagar.Utils.CommonUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
 
  @EqualsAndHashCode(callSuper = true)
  @Data

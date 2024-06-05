@@ -11,7 +11,18 @@ public class Constants {
     public static final String JWT_TOKEN_GENERATION_EXCEPTION_MESSAGE = "jwt token generation exception";
     public static final String AUTHORIZATION = "authorization";
 
+    public static final String LOCALE = "locale";
 
+    public static final String JOB_SAGAR = "jobSagar";
+    public static final String SERVICE = "service";
+
+    public static final String LOCALIZATION_SERVICE = "localization";
+
+    public static final String REQUEST_ID = "requestId";
+
+    public static final String HAS_NEXT = "hasnext";
+
+    public static final String TRUE = "true";
 
 
 }

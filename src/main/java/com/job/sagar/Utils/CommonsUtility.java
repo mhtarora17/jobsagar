@@ -1,4 +1,4 @@
-package com.job.Utils;
+package com.job.sagar.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
