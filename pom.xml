@@ -60,6 +60,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
@@ -168,22 +172,24 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<compilerArguments>--enable-preview</compilerArguments>
-				</configuration>
-				<executions>
-					<execution>
-						<id>process-aot</id>
-						<goals>
-							<goal>process-aot</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
     			<groupId>org.apache.maven.plugins</groupId>
     			<artifactId>maven-surefire-plugin</artifactId>
-   				<version>2.22.0</version>
+				<configuration>
+					<argLine>
+						--add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
+						--add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
+						--add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED
+						--add-opens java.base/java.lang=ALL-UNNAMED
+						--add-opens java.base/java.util=ALL-UNNAMED
+						--add-opens java.base/java.math=ALL-UNNAMED
+						--add-opens java.base/java.util.regex=ALL-UNNAMED
+						--add-opens java.base/java.util.stream=ALL-UNNAMED
+						--add-opens java.base/java.util.reflect=ALL-UNNAMED
+						--add-opens java.xml/jdk.xml.internal=ALL-UNNAMED
+					</argLine>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
