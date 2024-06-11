@@ -6,7 +6,9 @@ import java.math.BigInteger;
 import com.job.sagar.model.SchedulerData;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
-public interface SchedulerRepository extends PagingAndSortingRepository<SchedulerData, BigInteger>, CrudRepository<SchedulerData, BigInteger> {
+@Repository
+public interface SchedulerRepository extends PagingAndSortingRepository<SchedulerData, BigInteger> {
     SchedulerData findSchedulerDataBySchedulerName(String name);
 }

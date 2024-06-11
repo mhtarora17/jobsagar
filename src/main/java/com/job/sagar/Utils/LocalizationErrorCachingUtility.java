@@ -3,7 +3,6 @@ package com.job.sagar.Utils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.job.sagar.dao.SchedulerServiceDao;
-import com.job.sagar.dao.impl.SchedulerServiceDaoImpl;
 import com.job.sagar.exception.BadRequestException;
 import com.job.sagar.localization.LocalizationClient;
 import com.job.sagar.model.SchedulerData;
@@ -34,13 +33,21 @@ public class LocalizationErrorCachingUtility {
 
     private static final String LOCALIZATION_LOCALE_CACHING_SCHEDULER = "localizationLocaleCachingScheduler";
     private static final String LOCALIZATION_ERROR_CACHING_SCHEDULER = "localizationErrorCachingScheduler";
-    @Autowired
     private LocalizationClient localizationClient;
 
-    @Autowired
+
     private SchedulerServiceDao schedulerServiceDao;
 
     @Autowired
+    public LocalizationErrorCachingUtility(LocalizationClient localizationClient, SchedulerServiceDao schedulerServiceDao, ObjectMapper objectMapper, Map<String, Map<String, String>> errorMessagesCache, List<String> localeCache) {
+        this.localizationClient = localizationClient;
+        this.schedulerServiceDao = schedulerServiceDao;
+        this.objectMapper = objectMapper;
+        this.errorMessagesCache = errorMessagesCache;
+        this.localeCache = localeCache;
+    }
+
+
     private ObjectMapper objectMapper;
 
     private Map<String, Map<String, String>> errorMessagesCache;
@@ -49,8 +56,8 @@ public class LocalizationErrorCachingUtility {
 
     private static final TypeReference<List<Map<String, String>>> TYPE_REFERENCE = new TypeReference<List<Map<String, String>>>() {};
 
-    @Scheduled(initialDelayString = "${locale.cache.scheduler.initial.delay.ms}", fixedDelayString = "${locale.cache.scheduler.fixed.delay.ms}")
-    @SchedulerLock(name = LOCALIZATION_LOCALE_CACHING_SCHEDULER, lockAtMostFor = "PT40M")
+//    @Scheduled(initialDelayString = "${locale.cache.scheduler.initial.delay.ms}", fixedDelayString = "${locale.cache.scheduler.fixed.delay.ms}")
+//    @SchedulerLock(name = LOCALIZATION_LOCALE_CACHING_SCHEDULER, lockAtMostFor = "PT40M")
     public void fetchLocales() {
         ThreadContext.put(REQUEST_ID, "Locale-cache-scheduler" + Instant.now().toEpochMilli() / 1000);
         try {
@@ -64,8 +71,8 @@ public class LocalizationErrorCachingUtility {
         }
     }
 
-    @Scheduled(initialDelayString = "${locale.error.cache.scheduler.initial.delay.ms}", fixedDelayString = "${locale.error.cache.scheduler.fixed.delay.ms}")
-    @SchedulerLock(name = LOCALIZATION_ERROR_CACHING_SCHEDULER, lockAtMostFor = "PT40M")
+//    @Scheduled(initialDelayString = "${locale.error.cache.scheduler.initial.delay.ms}", fixedDelayString = "${locale.error.cache.scheduler.fixed.delay.ms}")
+//    @SchedulerLock(name = LOCALIZATION_ERROR_CACHING_SCHEDULER, lockAtMostFor = "PT40M")
     public void fetchErrorMessages() {
         ThreadContext.put(REQUEST_ID, "error-cache-scheduler-" + Instant.now().toEpochMilli() / 1000);
         try {

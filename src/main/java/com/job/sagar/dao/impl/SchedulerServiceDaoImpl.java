@@ -18,8 +18,13 @@ public class SchedulerServiceDaoImpl implements SchedulerServiceDao {
 
     private static final Logger logger = LogManager.getLogger(SchedulerServiceDaoImpl.class);
 
+
+    private final SchedulerRepository schedulerRepository;
+
     @Autowired
-    private SchedulerRepository schedulerRepository;
+    public SchedulerServiceDaoImpl(SchedulerRepository schedulerRepository) {
+        this.schedulerRepository = schedulerRepository;
+    }
 
     @Override
     public SchedulerData getSchedulerData (String name) {

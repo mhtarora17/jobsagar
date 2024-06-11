@@ -1,0 +1,97 @@
+{
+  "configuration" : {
+    "name" : "js",
+    "properties" : {
+      "property" : [
+        {
+          "name" : "log-path",
+          "value": "D:\\logs\\jobSagar\\"
+        },
+        {
+          "name" : "archive",
+          "value" : "${log-path}/archive"
+        },
+        {
+          "name" : "pattern",
+          "value" : "%X{requestId} - [%-5level] %d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'} [%t] %c{1} - %cmsg%n"
+        },
+        {
+          "name" : "jsonPattern",
+          "value" : "\"requestId\" : \"%X{requestId}\",\"level\" : \"%-5level\",\"time\" : \"%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}\",\"thread\" : \"%t\",\"class\":\"%c{1}\",\"line\":\"%L\",\"message\" : \"%cmsg\"}%n"
+        }
+      ]
+    },
+    "appenders": {
+      "Console" : {
+        "name" : "Console-Appender",
+        "target" : "SYSTEM_OUT",
+        "PatternLayout" : {
+          "pattern": "${pattern}"
+        }
+      },
+      "Routing" :[
+        {
+          "name" : "Routing",
+          "Routes" : {
+            "pattern" : "$${ctx:customSuffix}",
+            "Route" : [
+              {
+                "RollingFile" : {
+                  "name" : "RollingLogFile-Appender2",
+                  "fileName" : "${log-path}/jobSagar_application.log",
+                  "filePattern" : "${archive}/jobSagar_application.log.%d{dd-MM-yy-HH}-%i.gz",
+                  "PatternLayout" : {
+                    "pattern" : "${jsonPattern}"
+                  },
+                  "policies": {
+                    "SizeBasedTriggeringPolicy": {
+                      "size": "1 GB"
+                    },
+                    "TimeBasedTriggeringPolicy": {
+                      "interval" : "24",
+                      "modulate" : "true"
+                    }
+                  },
+                  "DefaultRolloverStrategy": {
+                    "max": "100"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "RoutingDataLog",
+          "Routes": {
+            "pattern": "$${ctx:customSuffix}",
+            "Route": [
+              {
+                "RollingFile": {
+                "name": "RollingLogFile-Appender2",
+                "fileName": "${log-path}/jobSagar_application_data_trace.log",
+                  "filePattern": "${archive}/jobSagar_application_data_trace.log.%d{dd-MM-yy-HH}-%i.gz",
+                  "PatternLayout": {
+                    "pattern" : "${jsonPattern}"
+                  },
+                  "Policies": {
+                    "SizeBasedTriggeringPolicy": {
+                      "size": "1 GB"
+                    },
+                    "TimeBasedTriggeringPolicy": {
+                      "interval": "24",
+                      "modulate": "true"
+                    }
+                  },
+                  "DefaultRolloverStrategy": {
+                    "max" : "100"
+                  }
+                }
+              }
+
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

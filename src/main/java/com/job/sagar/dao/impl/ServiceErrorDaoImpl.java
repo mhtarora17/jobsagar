@@ -27,7 +27,12 @@ public class ServiceErrorDaoImpl implements IServiceErrorDao {
     }
 
     public Iterable<ServiceError> getAllServiceErrors() {
-        return serviceErrorRepository.findAll();
+        try {
+            return serviceErrorRepository.findAll();
+        } catch (Exception e) {
+            logger.error("ex");
+            throw e;
+        }
     }
 
     @Override

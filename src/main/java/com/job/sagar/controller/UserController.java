@@ -52,4 +52,9 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @RequestMapping(value = "/ping", method = RequestMethod.GET, produces = "application/json")
+    public String ping() {
+        return "Service ok";
+    }
+
 }

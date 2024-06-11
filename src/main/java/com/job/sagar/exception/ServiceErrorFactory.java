@@ -30,7 +30,7 @@ import static com.job.sagar.constant.ErrorCodesConstant.INTERNAL_SERVER_ERROR_CO
 
 @Component
 @Qualifier("serviceErrorFactory")
-@DependsOn({"transactionFlyway", "localizationErrorCachingUtility"})
+@DependsOn({"localizationErrorCachingUtility"})
 public class ServiceErrorFactory implements ApplicationContextAware {
     private static final Logger LOGGER = LogManager.getLogger(ServiceErrorFactory.class);
     private static Map<Pair<String, String>, ServiceError> SERVICE_ERROR_MAP = new ConcurrentHashMap<>();
@@ -45,8 +45,8 @@ public class ServiceErrorFactory implements ApplicationContextAware {
                                ApplicationContext applicationContext, LocalizationErrorCachingUtility localizationErrorCachingUtility1, MetricsAgent metricsAgent1) {
         this.serviceErrorDao =serviceErrorDao;
         this.applicationContext =applicationContext;
-    localizationErrorCachingUtility =localizationErrorCachingUtility1;
-    metricsAgent=metricsAgent1;
+        localizationErrorCachingUtility =localizationErrorCachingUtility1;
+        metricsAgent=metricsAgent1;
     }
 
     public static Optional<BaseException> getException(String serviceName, String errorCode) {
